@@ -16,8 +16,7 @@ namespace Mars.Rover.Test
         [TestCase("RRRR", ExpectedResult ="0:0:N")]
         public string RotateRight(string command)
         {
-            var rover1 = new Models.Rover();
-            var rover = rover1;
+            var rover = new Models.Rover();
             return rover.Execute(command);
         }
 
@@ -28,8 +27,18 @@ namespace Mars.Rover.Test
         [TestCase("LLLL", ExpectedResult ="0:0:N")]
         public string RotateLeft(string command)
         {
-            var rover1 = new Models.Rover();
-            var rover = rover1;
+            var rover = new Models.Rover();
+            return rover.Execute(command);
+        }
+
+        [Test]
+        [TestCase("F", ExpectedResult ="0:1:N")]
+        [TestCase("FF", ExpectedResult ="0:2:N")]
+        [TestCase("FFF", ExpectedResult ="0:3:N")]
+        [TestCase("FFFF", ExpectedResult ="0:4:N")]
+        public string MoveForward(string command)
+        {
+            var rover = new Models.Rover();
             return rover.Execute(command);
         }
     }
