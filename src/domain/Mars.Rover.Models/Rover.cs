@@ -16,7 +16,7 @@ namespace Mars.Rover.Models
                 _direction = _direction.MoveRover(command);
             }
             
-            return $"{_direction.CurrentLocation.XCoordinate}:{_direction.CurrentLocation.YCoordinate}:{_direction.CurrentDirection}";
+            return $"{Math.Abs( _direction.CurrentLocation.XCoordinate)}:{Math.Abs( _direction.CurrentLocation.YCoordinate)}:{_direction.CurrentDirection}";
 
         }
 

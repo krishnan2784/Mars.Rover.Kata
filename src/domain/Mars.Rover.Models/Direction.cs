@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mars.Rover.Models
@@ -8,7 +9,7 @@ namespace Mars.Rover.Models
         #region Public Fields
 
         public char CurrentDirection;
-
+        private int _maxGridHeight;
         #endregion Public Fields
 
 
@@ -24,8 +25,14 @@ namespace Mars.Rover.Models
         {
             CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
             CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
+            _maxGridHeight = 10;
         }
-
+        public Direction(char direction, int xCoOrdinate, int yCoordinate, int maxGridHeight)
+        {
+            CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
+            CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
+            _maxGridHeight = maxGridHeight;
+        }
         #endregion Public Constructors
 
 
@@ -77,26 +84,27 @@ namespace Mars.Rover.Models
         {
 
             MoveInTheVerticalPlane();
+            MoveInTheHorizontalPlane();
             
-            if (CurrentDirection.Equals('E'))
-                CurrentLocation.XCoordinate++;
-            if (CurrentDirection.Equals('W'))
-                CurrentLocation.XCoordinate--;
             return this;
         }
 
         private void  MoveInTheVerticalPlane()
         {
             if (CurrentDirection.Equals('N'))
-                CurrentLocation.YCoordinate++;
+                CurrentLocation.YCoordinate = (CurrentLocation.YCoordinate + 1) % _maxGridHeight;
             if (CurrentDirection.Equals('S'))
-                CurrentLocation.YCoordinate--;
+            {
+                CurrentLocation.YCoordinate = (CurrentLocation.YCoordinate - 1) % _maxGridHeight;
+            }
         }
 
-        private Direction MoveForward()
+        private void MoveInTheHorizontalPlane()
         {
-            
-            return this;
+            if (CurrentDirection.Equals('E'))
+                CurrentLocation.XCoordinate++;
+            if (CurrentDirection.Equals('W'))
+                CurrentLocation.XCoordinate--;
         }
 
         #endregion Private Methods
