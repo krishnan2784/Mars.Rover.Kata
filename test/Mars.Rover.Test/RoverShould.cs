@@ -89,6 +89,8 @@ namespace Mars.Rover.Test
         [Test]
         [TestCase("RMMMMMMMMMM", ExpectedResult ="0:0:E")]
         [TestCase("RMMMMMMMMMMMMMMM", ExpectedResult ="5:0:E")]
+        [TestCase("LMMMMMMMMMM", ExpectedResult ="0:0:W")]
+        [TestCase("LMMMMMMMMMMMMMMM", ExpectedResult ="5:0:W")]
         public string MoveSidewaysWithWrapAround(string command)
         {
             var rover = new Models.Rover();
