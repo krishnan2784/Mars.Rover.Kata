@@ -8,6 +8,14 @@ namespace Mars.Rover.Models
         #region Public Fields
 
         public char CurrentDirection;
+        private readonly int _maxGridHeight;
+        private readonly int _maxGridWidth;
+        public Direction(char direction, int xCoOrdinate, int yCoordinate, int maxGridHeight)
+        {
+            CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
+            CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
+            _maxGridHeight = maxGridHeight;
+        }
 
         #endregion Public Fields
 
@@ -24,8 +32,16 @@ namespace Mars.Rover.Models
         {
             CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
             CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
+            _maxGridHeight = 10;
+            _maxGridWidth = 10;
         }
-
+        public Direction(char direction, int xCoOrdinate, int yCoordinate, int maxGridHeight, int maxGridWidth)
+        {
+            CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
+            CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
+            _maxGridHeight = maxGridHeight;
+            _maxGridWidth = maxGridWidth;
+        }
         #endregion Public Constructors
 
 
@@ -77,26 +93,32 @@ namespace Mars.Rover.Models
         {
 
             MoveInTheVerticalPlane();
+            MoveInTheHorizontalPlane();
             
-            if (CurrentDirection.Equals('E'))
-                CurrentLocation.XCoordinate++;
-            if (CurrentDirection.Equals('W'))
-                CurrentLocation.XCoordinate--;
             return this;
         }
 
         private void  MoveInTheVerticalPlane()
         {
             if (CurrentDirection.Equals('N'))
-                CurrentLocation.YCoordinate++;
+                CurrentLocation.YCoordinate = (CurrentLocation.YCoordinate + 1) % _maxGridHeight;
             if (CurrentDirection.Equals('S'))
-                CurrentLocation.YCoordinate--;
+            {
+                if (CurrentLocation.YCoordinate == 1)
+                    CurrentLocation.YCoordinate = 0;
+                else
+                    CurrentLocation.YCoordinate = (CurrentLocation.YCoordinate - 1) % _maxGridHeight;
+            }
+            
         }
 
-        private Direction MoveForward()
+        private void MoveInTheHorizontalPlane()
         {
-            
-            return this;
+            if (CurrentDirection.Equals('E'))
+                CurrentLocation.XCoordinate = (CurrentLocation.XCoordinate + 1) % _maxGridWidth;
+                
+            if (CurrentDirection.Equals('W'))
+                CurrentLocation.XCoordinate = (CurrentLocation.XCoordinate - 1) % _maxGridWidth;
         }
 
         #endregion Private Methods
