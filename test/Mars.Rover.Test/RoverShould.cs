@@ -32,11 +32,51 @@ namespace Mars.Rover.Test
         }
 
         [Test]
-        [TestCase("F", ExpectedResult ="0:1:N")]
-        [TestCase("FF", ExpectedResult ="0:2:N")]
-        [TestCase("FFF", ExpectedResult ="0:3:N")]
-        [TestCase("FFFF", ExpectedResult ="0:4:N")]
-        public string MoveForward(string command)
+        [TestCase("M", ExpectedResult ="0:1:N")]
+        [TestCase("MM", ExpectedResult ="0:2:N")]
+        [TestCase("MMM", ExpectedResult ="0:3:N")]
+        [TestCase("MMMM", ExpectedResult ="0:4:N")]
+        public string MoveUp(string command)
+        {
+            var rover = new Models.Rover();
+            return rover.Execute(command);
+        }
+
+        [Test]
+        [TestCase("MRRMLL", ExpectedResult ="0:0:N")]
+        [TestCase("MMLLMMRR", ExpectedResult ="0:0:N")]
+        [TestCase("MMMRRMMM", ExpectedResult ="0:0:S")]
+        [TestCase("MMMMLLMMMM", ExpectedResult ="0:0:S")]
+        public string MoveUpAndDown(string command)
+        {
+            var rover = new Models.Rover();
+            return rover.Execute(command);
+        }
+
+        [Test]
+        [TestCase("RMLLMR", ExpectedResult ="0:0:N")]
+        [TestCase("RMMLLMMR", ExpectedResult ="0:0:N")]
+        [TestCase("RMMMLLMMMR", ExpectedResult ="0:0:N")]
+        [TestCase("RMMMMLLMMMMR", ExpectedResult ="0:0:N")]
+        public string MoveSideToSide(string command)
+        {
+            var rover = new Models.Rover();
+            return rover.Execute(command);
+        }
+
+        [Test]
+        [TestCase("MRMRMRM", ExpectedResult ="0:0:W")]
+        [TestCase("MMRMMRMMRMM", ExpectedResult ="0:0:W")]
+        [TestCase("MMMRMMMRMMMRMMM", ExpectedResult ="0:0:W")]
+        [TestCase("MMMMRMMMMRMMMMRMMMM", ExpectedResult ="0:0:W")]
+        public string MoveInASquare(string command)
+        {
+            var rover = new Models.Rover();
+            return rover.Execute(command);
+        }
+        [Test]
+        [TestCase("MMMMMMMMMM", ExpectedResult ="0:0:N")]
+        public string MoveUpWithWrapAround(string command)
         {
             var rover = new Models.Rover();
             return rover.Execute(command);

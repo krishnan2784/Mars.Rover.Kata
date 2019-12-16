@@ -1,19 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Mars.Rover.Models
 {
     public class Direction
     {
-        public CoOrdinate CurrentLocation { get; private set; }
+        #region Public Fields
+
+        public char CurrentDirection;
+
+        #endregion Public Fields
+
+
+
+        #region Public Constructors
+
         public Direction(char direction)
         {
             CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
-            
         }
 
+        public Direction(char direction, int xCoOrdinate, int yCoordinate)
+        {
+            CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
+            CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
+        }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
+        public CoOrdinate CurrentLocation { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Private Properties
 
         private IEnumerable<(char direction, char leftDirection, char rightDirection)> Directions =>
             new List<(char direction, char leftDirection, char rightDirection)>
@@ -24,38 +49,56 @@ namespace Mars.Rover.Models
                     ('W', 'S', 'N')
                 };
 
-        public char CurrentDirection;
+        #endregion Private Properties
 
-        public Direction(char direction, int xCoOrdinate, int yCoordinate)
-        {
-            CurrentLocation = new CoOrdinate(xCoOrdinate, yCoordinate);
-            CurrentDirection = Directions.FirstOrDefault(x => x.direction.Equals(direction)).direction;
-        }
 
-        public Direction Rotate(char command)
+
+        #region Public Methods
+
+        public Direction MoveRover(char command)
         {
-            var (direction, leftDirection, rightDirection) = Directions.FirstOrDefault(x => x.direction.Equals(CurrentDirection));
+            var (_, leftDirection, rightDirection) = Directions.FirstOrDefault(x => x.direction.Equals(CurrentDirection));
             if (command.Equals('R'))
-                return new Direction(rightDirection, this.CurrentLocation.XCoordinate, this.CurrentLocation.YCoordinate);
-
+                return new Direction(rightDirection, CurrentLocation.XCoordinate, CurrentLocation.YCoordinate);
             if (command.Equals('L'))
-                return new Direction(leftDirection, this.CurrentLocation.XCoordinate, this.CurrentLocation.YCoordinate);
-            if (command.Equals('F'))
-                return MoveFoward();
+                return new Direction(leftDirection, CurrentLocation.XCoordinate, CurrentLocation.YCoordinate);
+            if (command.Equals('M'))
+                return Move();
             return new Direction(CurrentDirection);
         }
 
-        private Direction MoveFoward()
+        #endregion Public Methods
+
+
+
+        #region Private Methods
+
+        private Direction Move()
         {
-            if(CurrentDirection.Equals('N'))
-                CurrentLocation.YCoordinate++;
-            if(CurrentDirection.Equals('S'))
-                CurrentLocation.YCoordinate--;
-            if(CurrentDirection.Equals('E'))
+
+            MoveInTheVerticalPlane();
+            
+            if (CurrentDirection.Equals('E'))
                 CurrentLocation.XCoordinate++;
-            if(CurrentDirection.Equals('W'))
+            if (CurrentDirection.Equals('W'))
                 CurrentLocation.XCoordinate--;
             return this;
         }
+
+        private void  MoveInTheVerticalPlane()
+        {
+            if (CurrentDirection.Equals('N'))
+                CurrentLocation.YCoordinate++;
+            if (CurrentDirection.Equals('S'))
+                CurrentLocation.YCoordinate--;
+        }
+
+        private Direction MoveForward()
+        {
+            
+            return this;
+        }
+
+        #endregion Private Methods
     }
 }
